@@ -1,0 +1,9 @@
+/* CSS declarations go here */
+.nav .active {
+	background-color: ;
+}
+
+.navbar-nav li a{
+	color: #563d7c;
+	font-weight: 500;
+}
