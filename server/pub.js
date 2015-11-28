@@ -3,3 +3,12 @@ Meteor.publish('customersInStore', function(store){
 		'store': store
 	});
 });
+
+Meteor.publish('ordersForMe', function(customer){
+	return Orders.find({
+		'customer': customer,
+		sort: {
+			'time': -1
+		}
+	});
+});

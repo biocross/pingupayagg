@@ -17,5 +17,13 @@ Meteor.methods({
 				'customer': element
 			});
 		});
+	},
+
+	'raiseInvoice': function(customer, invoice){
+		Orders.insert({
+			'customer': customer,
+			'invoice': invoice,
+			'time': Date.now()
+		});
 	}
 });
