@@ -19,11 +19,73 @@ Meteor.methods({
 		});
 	},
 
-	'raiseInvoice': function(customer, invoice){
+	'raiseInvoice': function(customer, amount){
 		Orders.insert({
 			'customer': customer,
-			'invoice': invoice,
-			'time': Date.now()
+			'amount': amount,
+			'time': Date.now(),
+			'approved': false
 		});
+	},
+
+	'paymentComplete': function(customer, amount){
+		Orders.update({
+			'customer': customer,
+			'amount': amount
+		},
+		{
+			$set: {
+				'approved': true
+			}
+		});
+	},
+
+	'registerCustomer': function(customerName, customerProfilePicURL, beaconID){
+		var alreadyExists = Customers.findOne({
+			'beaconID': beaconID
+		});
+
+		if(alreadyExists){
+			Customers.update({
+				'beaconID': beaconID
+			},
+			{
+				$set: {
+					'name': customerName,
+					'picURL': customerProfilePicURL
+				}
+			})
+		}
+		else {
+			Customers.insert({
+				'name': merchant,
+				'picURL': customerProfilePicURL,
+				'beaconID': beaconID
+			});
+		}
+	},
+
+	'registerMerchant': function(merchant, beaconID){
+		
+		var alreadyExists = Merchants.findOne({
+			'beaconID': beaconID
+		});
+
+		if(alreadyExists){
+			Merchants.update({
+				'beaconID': beaconID
+			},
+			{
+				$set: {
+					'name': merchant
+				}
+			})
+		}
+		else {
+			Merchants.insert({
+				'name': merchant,
+				'beaconID': beaconID
+			});
+		}
 	}
 });
