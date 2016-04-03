@@ -1,17 +1,15 @@
 Meteor.methods({
-	'currentCustomersInStore': function(store, customers) {
+	'updateCustomersInStore': function(store, customers) {
 			
-		var previous = CustomersInStore.find({'store': store}).fetch();
-		var customersWhoHaveLeft = _.difference(previous, _.intersection(previous, customers));
-		var customersWhoHaveEntered = _difference(customers, _.intersection(previous, customers));
+		console.log("store:" + store);
+		console.log("customers: " + customers);
 
-		customersWhoHaveLeft.forEach(function(customer){
-			CustomersInStore.remove({
-				'customer': customer
-			});
+		CustomersInStore.remove({
+			'store': store
 		});
 
-		customersWhoHaveEntered.forEach(function(element){
+
+		customers.forEach(function(element){
 			CustomersInStore.insert({
 				'store': store,
 				'customer': element
@@ -20,12 +18,14 @@ Meteor.methods({
 	},
 
 	'raiseInvoice': function(customer, amount){
+		console.log("entering " + customer + " with amount " + amount);
 		Orders.insert({
 			'customer': customer,
 			'amount': amount,
 			'time': Date.now(),
 			'approved': false
 		});
+		console.log('order inserted');
 	},
 
 	'paymentComplete': function(customer, amount){
